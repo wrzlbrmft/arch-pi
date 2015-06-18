@@ -184,6 +184,7 @@ doDownloadArchLinux() {
 doUnpackArchLinux() {
 	bsdtar -xvpf "`basename "$ARCH_LINUX_DOWNLOAD"`" -C root
 
+	doPrint "Flushing - this might take a while..."
 	doFlush
 }
 
