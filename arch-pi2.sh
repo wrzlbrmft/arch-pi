@@ -84,6 +84,7 @@ doFlush() {
 
 doWipeAllPartitions() {
 	for i in $( getAllPartitions | sort -r ); do
+		umount "$INSTALL_DEVICE_HOME/$i"
 		dd if=/dev/zero of="$INSTALL_DEVICE_HOME/$i" bs=1M count=1
 	done
 
