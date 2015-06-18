@@ -237,3 +237,46 @@ doUnmount() {
 	umount root
 	rmdir root
 }
+
+# =================================================================================
+#    M A I N
+# =================================================================================
+
+doConfirmInstall
+
+doWipeAllPartitions
+doDeleteAllPartitions
+doWipeDevice
+
+doCreateNewPartitionTable "$PARTITION_TABLE_TYPE"
+
+doCreateNewPartitions
+doSetNewPartitionTypes
+doDetectDevices
+
+doFormat
+doMount
+
+doDownloadArchLinux
+doUnpackArchLinux
+
+doSetHostname "$HOSTNAME"
+doSetTimezone "$TIMEZONE"
+
+if [ "$SET_NETWORK" == "yes" ]; then
+	doSetNetwork
+fi
+
+if [ "$SYMLINK_HASH_COMMANDS" == "yes" ]; then
+	doSymlinkHashCommands
+fi
+
+if [ "$OPTIMIZE_SWAPPINESS" == "yes" ]; then
+	doOptimizeSwappiness
+fi
+
+doUnmount
+
+doPrint "Wake up, Neo... The installation is done!"
+
+exit 0
