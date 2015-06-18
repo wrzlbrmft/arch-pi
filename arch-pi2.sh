@@ -9,7 +9,7 @@ doPrint() {
 }
 
 doPrintHelpMessage() {
-	printf "Usage: ./$INSTALL_SCRIPT [-h] [-c config] [target [options...]]\n"
+	printf "Usage: ./$INSTALL_SCRIPT [-h] [-c config]\n"
 }
 
 while getopts :hc: opt; do
@@ -175,7 +175,7 @@ doMount() {
 }
 
 doDownloadArchLinux() {
-	if [ ! -e "`basename "$ARCH_LINUX_DOWNLOAD"`" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
+	if [ ! -f "`basename "$ARCH_LINUX_DOWNLOAD"`" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
 		rm -f "`basename "$ARCH_LINUX_DOWNLOAD"`"
 		wget "$ARCH_LINUX_DOWNLOAD"
 	fi
@@ -259,6 +259,7 @@ doMount
 
 doDownloadArchLinux
 doUnpackArchLinux
+doMoveBoot
 
 doSetHostname "$HOSTNAME"
 doSetTimezone "$TIMEZONE"
