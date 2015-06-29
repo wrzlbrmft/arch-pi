@@ -221,6 +221,12 @@ Gateway=$NETWORK_GATEWAY
 __END__
 }
 
+doDisableIpv6() {
+	cat > root/etc/sysctl.d/40-ipv6.conf << __END__
+ipv6.disable_ipv6=1
+__END__
+}
+
 doSymlinkHashCommands() {
 	ln -s /usr/bin/md5sum root/usr/local/bin/md5
 	ln -s /usr/bin/sha1sum root/usr/local/bin/sha1
@@ -268,6 +274,10 @@ doSetTimezone "$TIMEZONE"
 
 if [ "$SET_NETWORK" == "yes" ]; then
 	doSetNetwork
+fi
+
+if [ "$DISABLE_IPV6" == "yes" ]; then
+	doDisableIpv6
 fi
 
 if [ "$SYMLINK_HASH_COMMANDS" == "yes" ]; then
