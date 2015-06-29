@@ -227,6 +227,12 @@ ipv6.disable_ipv6=1
 __END__
 }
 
+doBashLogoutClear() {
+	cat >> root/root/.bash_logout << __END__
+clear
+__END__
+}
+
 doSymlinkHashCommands() {
 	ln -s /usr/bin/md5sum root/usr/local/bin/md5
 	ln -s /usr/bin/sha1sum root/usr/local/bin/sha1
@@ -278,6 +284,10 @@ fi
 
 if [ "$DISABLE_IPV6" == "yes" ]; then
 	doDisableIpv6
+fi
+
+if [ "$ROOT_USER_BASH_LOGOUT_CLEAR" == "yes" ]; then
+	doBashLogoutClear
 fi
 
 if [ "$SYMLINK_HASH_COMMANDS" == "yes" ]; then
