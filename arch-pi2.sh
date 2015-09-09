@@ -233,6 +233,17 @@ clear
 __END__
 }
 
+doSshAcceptKeyTypeSshDss() {
+	cat >> root/etc/ssh/ssh_config << __END__
+Host *
+  PubkeyAcceptedKeyTypes=+ssh-dss
+__END__
+
+	cat >> root/etc/ssh/sshd_config << __END__
+PubkeyAcceptedKeyTypes=+ssh-dss
+__END__
+}
+
 doSymlinkHashCommands() {
 	ln -s /usr/bin/md5sum root/usr/local/bin/md5
 	ln -s /usr/bin/sha1sum root/usr/local/bin/sha1
@@ -288,6 +299,10 @@ fi
 
 if [ "$ROOT_USER_BASH_LOGOUT_CLEAR" == "yes" ]; then
 	doBashLogoutClear
+fi
+
+if [ "$SSH_ACCEPT_KEY_TYPE_SSH_DSS" == "yes" ]; then
+	doSshAcceptKeyTypeSshDss
 fi
 
 if [ "$SYMLINK_HASH_COMMANDS" == "yes" ]; then
