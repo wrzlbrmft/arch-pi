@@ -178,7 +178,7 @@ doMount() {
 doDownloadArchLinux() {
 	if [ ! -f "`basename "$ARCH_LINUX_DOWNLOAD"`" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
 		rm -f "`basename "$ARCH_LINUX_DOWNLOAD"`"
-		curl -O "$ARCH_LINUX_DOWNLOAD"
+		curl -LO "$ARCH_LINUX_DOWNLOAD"
 	fi
 }
 

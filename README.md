@@ -32,7 +32,7 @@ In a Terminal download and unpack the latest version of
 `arch-pi2`:
 
 ```
-wget -O - https://github.com/wrzlbrmft/arch-pi2/archive/master.tar.gz | tar zxvf -
+curl -L https://github.com/wrzlbrmft/arch-pi2/archive/master.tar.gz | tar zxvf -
 ```
 
 Insert the SD card on which you want to install Arch Linux, but make sure none
