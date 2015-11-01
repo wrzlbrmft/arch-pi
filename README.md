@@ -33,7 +33,6 @@ In a Terminal download and unpack the latest version of
 
 ```
 wget -O - https://github.com/wrzlbrmft/arch-pi2/archive/master.tar.gz | tar zxvf -
-cd arch-pi2-master
 ```
 
 Insert the SD card on which you want to install Arch Linux, but make sure none
@@ -41,7 +40,7 @@ of its partitions is mounted, otherwise unmount them. Then determine the device
 name of the SD card, e.g. `/dev/mmcblk0`, and open the configuration file:
 
 ```
-vi arch-pi2.conf
+vi arch-pi2-master/arch-pi2.conf
 ```
 
 Make sure the `INSTALL_DEVICE` setting matches the device name of your SD card.
@@ -60,7 +59,7 @@ needs super-user privileges. So `su` to `root` or use `sudo` to start the
 installation process:
 
 ```
-sudo arch-pi2.sh
+sudo arch-pi2-master/arch-pi2.sh
 ```
 
 **CAUTION:** The installation will delete *all* existing data on the SD card.
@@ -84,7 +83,7 @@ You can use an alternative configuration file by passing it to the installation
 script:
 
 ```
-arch-pi2.sh -c my.conf
+arch-pi2-master/arch-pi2.sh -c my.conf
 ```
 
 ## License
