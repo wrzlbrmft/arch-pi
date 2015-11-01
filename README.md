@@ -23,7 +23,7 @@ available:
 * `fdisk`
 * `dd`
 * `parted`
-* `wget`
+* `curl`
 * `tar`
 
 ## Usage Guide
