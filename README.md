@@ -20,7 +20,6 @@ For the Linux environment, you can also use a Live-CD like
 available:
 
 * `lsblk`
-* `fdisk`
 * `dd`
 * `parted`
 * `curl`
