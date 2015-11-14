@@ -95,16 +95,6 @@ doPartProbe() {
 	partprobe "$INSTALL_DEVICE"
 }
 
-doDeleteAllPartitions() {
-	fdisk "$INSTALL_DEVICE" << __END__
-o
-w
-__END__
-
-	doFlush
-	doPartProbe
-}
-
 doWipeDevice() {
 	dd if=/dev/zero of="$INSTALL_DEVICE" bs=1M count=1
 
@@ -255,7 +245,6 @@ doUnmount() {
 doConfirmInstall
 
 doWipeAllPartitions
-doDeleteAllPartitions
 doWipeDevice
 
 doCreateNewPartitionTable "$PARTITION_TABLE_TYPE"
