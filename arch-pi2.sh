@@ -118,27 +118,12 @@ doCreateNewPartitionTable() {
 
 doCreateNewPartitions() {
 	local START="1"; local END="$BOOT_SIZE"
-	parted -s -a optimal "$INSTALL_DEVICE" mkpart primary linux-swap "${START}MiB" "${END}MiB"
+	parted -s -a optimal "$INSTALL_DEVICE" mkpart primary "${START}MiB" "${END}MiB"
 
 	START="$END"; END="100%"
-	parted -s -a optimal "$INSTALL_DEVICE" mkpart primary linux-swap "${START}MiB" "${END}MiB"
+	parted -s -a optimal "$INSTALL_DEVICE" mkpart primary "${START}MiB" "${END}MiB"
 
 	parted -s -a optimal "$INSTALL_DEVICE" toggle 1 boot
-
-	doFlush
-	doPartProbe
-}
-
-doSetNewPartitionTypes() {
-	fdisk "$INSTALL_DEVICE" << __END__
-t
-1
-$BOOT_PARTITION_TYPE
-t
-2
-$ROOT_PARTITION_TYPE
-w
-__END__
 
 	doFlush
 	doPartProbe
@@ -276,7 +261,6 @@ doWipeDevice
 doCreateNewPartitionTable "$PARTITION_TABLE_TYPE"
 
 doCreateNewPartitions
-doSetNewPartitionTypes
 doDetectDevices
 
 doFormat
