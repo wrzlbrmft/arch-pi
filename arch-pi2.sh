@@ -113,7 +113,7 @@ doCreateNewPartitions() {
 	START="$END"; END="100%"
 	parted -s -a optimal "$INSTALL_DEVICE" mkpart primary "${START}MiB" "${END}MiB"
 
-	parted -s -a optimal "$INSTALL_DEVICE" toggle 1 boot
+	parted -s -a optimal "$INSTALL_DEVICE" set 1 boot on
 
 	doFlush
 	doPartProbe
