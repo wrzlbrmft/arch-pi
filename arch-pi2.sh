@@ -108,7 +108,15 @@ doCreateNewPartitionTable() {
 
 doCreateNewPartitions() {
 	local START="1"; local END="$BOOT_SIZE"
-	parted -s -a optimal "$INSTALL_DEVICE" mkpart primary "${START}MiB" "${END}MiB"
+	case "$BOOT_FILESYSTEM" in
+		fat32)
+			parted -s -a optimal "$INSTALL_DEVICE" mkpart primary "$BOOT_FILESYSTEM" "${START}MiB" "${END}MiB"
+			;;
+
+		*)
+			parted -s -a optimal "$INSTALL_DEVICE" mkpart primary "${START}MiB" "${END}MiB"
+			;;
+	esac
 
 	START="$END"; END="100%"
 	parted -s -a optimal "$INSTALL_DEVICE" mkpart primary "${START}MiB" "${END}MiB"
