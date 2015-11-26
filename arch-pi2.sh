@@ -4,8 +4,12 @@ INSTALL_HOME=$( cd "`dirname "${BASH_SOURCE[0]}"`" && pwd )
 INSTALL_SCRIPT="`basename "${BASH_SOURCE[0]}"`"
 INSTALL_NAME="`printf "$INSTALL_SCRIPT" | awk -F '.' '{ print $1 }'`"
 
+doPrintPrompt() {
+	printf "[$INSTALL_NAME] $*"
+}
+
 doPrint() {
-	printf "[$INSTALL_NAME] $*\n"
+	doPrintPrompt "$*\n"
 }
 
 doPrintHelpMessage() {
@@ -57,9 +61,41 @@ fi
 #    F U N C T I O N S
 # =================================================================================
 
+doSelectRaspberryPi() {
+	local i=0
+
+	if [ -z "$RASPBERRY_PI_SELECT" ]; then
+		doPrint "Select Raspberry Pi"
+
+		local j=1
+		while [ "$i" -lt "${#RASPBERRY_PI[@]}" ]; do
+			doPrint "$j = ${RASPBERRY_PI[$i]}"
+			let i=i+2
+			let j=j+1
+		done
+
+		doPrintPrompt "> "
+		read i
+		if [[ ! $i =~ ^[0-9]+$ ]] || [ ! "$i" -gt "0" ] || [ ! "$i" -lt "$j" ]; then
+			printf "ERROR: Invalid selection ('$i')\n"
+			exit 1
+		else
+			RASPBERRY_PI_SELECT="$i"
+		fi
+	fi
+
+	let i=$RASPBERRY_PI_SELECT*2-2
+	doPrint "Installing a ${RASPBERRY_PI[$i]}"
+
+	let i=i+1
+	ARCH_LINUX_DOWNLOAD="${RASPBERRY_PI[$i]}"
+}
+
 doConfirmInstall() {
 	doPrint "Installing to '$INSTALL_DEVICE' - ALL DATA ON IT WILL BE LOST!"
-	doPrint "Enter 'YES' (in capitals) to confirm:"
+	doPrint "Enter 'YES' (in capitals) to confirm and start the installation."
+
+	doPrintPrompt "> "
 	read i
 	if [ "$i" != "YES" ]; then
 		doPrint "Aborted."
@@ -249,6 +285,8 @@ doUnmount() {
 # =================================================================================
 #    M A I N
 # =================================================================================
+
+doSelectRaspberryPi
 
 doConfirmInstall
 
