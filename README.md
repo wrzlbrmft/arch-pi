@@ -15,8 +15,9 @@ The installation procedure pretty much matches the Installation Guides from
 but also adds some configuration settings like networking, including a static IP
 address for a fully headless setup without a screen or keyboard.
 
-After the installation you can directly login to you Raspberry Pi using the
-pre-configured IP address.
+After the installation you can directly login to your
+Raspberry Pi
+using the pre-configured IP address.
 
 ## Requirements
 
