@@ -225,9 +225,9 @@ doSetTimezone() {
 }
 
 doSetNetwork() {
-	cat > root/etc/systemd/network/eth0.network << __END__
+	cat > "root/etc/systemd/network/$NETWORK_INTERFACE.network" << __END__
 [Match]
-Name=eth0
+Name=$NETWORK_INTERFACE
 
 [Network]
 DNS=$NETWORK_DNS
