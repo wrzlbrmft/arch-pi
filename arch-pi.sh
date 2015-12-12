@@ -308,29 +308,17 @@ doMoveBoot
 doSetHostname "$HOSTNAME"
 doSetTimezone "$TIMEZONE"
 
-if [ "$SET_NETWORK" == "yes" ]; then
-	doSetNetwork
-fi
+[ "$SET_NETWORK" == "yes" ] && doSetNetwork
 
-if [ "$DISABLE_IPV6" == "yes" ]; then
-	doDisableIpv6
-fi
+[ "$DISABLE_IPV6" == "yes" ] && doDisableIpv6
 
-if [ "$ROOT_USER_BASH_LOGOUT_CLEAR" == "yes" ]; then
-	doBashLogoutClear
-fi
+[ "$ROOT_USER_BASH_LOGOUT_CLEAR" == "yes" ] && doBashLogoutClear
 
-if [ "$SSH_ACCEPT_KEY_TYPE_SSH_DSS" == "yes" ]; then
-	doSshAcceptKeyTypeSshDss
-fi
+[ "$SSH_ACCEPT_KEY_TYPE_SSH_DSS" == "yes" ] && doSshAcceptKeyTypeSshDss
 
-if [ "$SYMLINK_HASH_COMMANDS" == "yes" ]; then
-	doSymlinkHashCommands
-fi
+[ "$SYMLINK_HASH_COMMANDS" == "yes" ] && doSymlinkHashCommands
 
-if [ "$OPTIMIZE_SWAPPINESS" == "yes" ]; then
-	doOptimizeSwappiness
-fi
+[ "$OPTIMIZE_SWAPPINESS" == "yes" ] && doOptimizeSwappiness
 
 doUnmount
 
