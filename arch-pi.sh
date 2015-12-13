@@ -70,7 +70,7 @@ doSelectRaspberryPi() {
 		local j=1
 		while [ "$i" -lt "${#RASPBERRY_PI[@]}" ]; do
 			doPrint "$j = ${RASPBERRY_PI[$i]}"
-			let i=i+2
+			let i=i+3
 			let j=j+1
 		done
 
@@ -84,11 +84,14 @@ doSelectRaspberryPi() {
 		fi
 	fi
 
-	let i=$RASPBERRY_PI_SELECT*2-2
+	let i=$RASPBERRY_PI_SELECT*3-3
 	doPrint "Installing for ${RASPBERRY_PI[$i]}"
 
 	let i=i+1
 	ARCH_LINUX_DOWNLOAD="${RASPBERRY_PI[$i]}"
+
+	let i=i+1
+	ARCH_LINUX_PACKAGES_URL="${RASPBERRY_PI[$i]}"
 }
 
 doConfirmInstall() {
