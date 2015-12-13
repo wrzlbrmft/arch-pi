@@ -85,7 +85,7 @@ doSelectRaspberryPi() {
 	fi
 
 	let i=$RASPBERRY_PI_SELECT*2-2
-	doPrint "Installing a ${RASPBERRY_PI[$i]}"
+	doPrint "Installing for ${RASPBERRY_PI[$i]}"
 
 	let i=i+1
 	ARCH_LINUX_DOWNLOAD="${RASPBERRY_PI[$i]}"
@@ -208,7 +208,7 @@ doUnpackArchLinux() {
 	doFlush
 }
 
-doMoveBoot() {
+doFinalizeBoot() {
 	mv root/boot/* boot
 
 	doFlush
@@ -303,7 +303,8 @@ doMount
 
 doDownloadArchLinux
 doUnpackArchLinux
-doMoveBoot
+
+doFinalizeBoot
 
 doSetHostname "$HOSTNAME"
 doSetTimezone "$TIMEZONE"
