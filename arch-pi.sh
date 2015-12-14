@@ -278,20 +278,23 @@ __END__
 }
 
 doDownloadPackage() {
-	local REPOSITORY="`printf "$1" | awk -F '/' '{ print $1 }'`"
-	local PACKAGE="`printf "$1" | awk -F '/' '{ print $2 }'`"
+	local REPOSITORY="`printf "$2" | awk -F '/' '{ print $1 }'`"
+	local PACKAGE="`printf "$2" | awk -F '/' '{ print $2 }'`"
 
 	local PACKAGE_FILE="`curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>//g' | grep "$PACKAGE-.*xz[^.]" | awk '{ print \$1 }'`"
 	local PACKAGE_FILE_DOWNLOAD="$ARCH_LINUX_PACKAGES_URL$REPOSITORY/$PACKAGE_FILE"
+
+	doPrint ">>> [$1] $REPOSITORY/$PACKAGE ($PACKAGE_FILE_DOWNLOAD)"
 
 	mkdir -p "root$DOWNLOAD_PACKAGE_SETS_PATH"
 	curl -L "$PACKAGE_FILE_DOWNLOAD" -o "root$DOWNLOAD_PACKAGE_SETS_PATH/$PACKAGE_FILE"
 }
 
 doDownloadPackageSets() {
+	doPrint "Downloading package sets..."
 	for i in $DOWNLOAD_PACKAGE_SETS; do
 		for j in ${PACKAGE_SET[$i]}; do
-			doDownloadPackage "$j"
+			doDownloadPackage "$i" "$j"
 		done
 	done
 }
