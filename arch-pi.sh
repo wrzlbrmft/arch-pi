@@ -206,9 +206,6 @@ doDownloadArchLinux() {
 
 doUnpackArchLinux() {
 	tar xvf "`basename "$ARCH_LINUX_DOWNLOAD"`" -C root -p
-
-	doPrint "Flushing - this might take a while..."
-	doFlush
 }
 
 doFinalizeBoot() {
@@ -346,7 +343,10 @@ doSetTimezone "$TIMEZONE"
 
 [ "$OPTIMIZE_SWAPPINESS" == "yes" ] && doOptimizeSwappiness
 
-doDownloadPackageSets
+[ ! -z "$DOWNLOAD_PACKAGE_SETS" ] && doDownloadPackageSets
+
+doPrint "Flushing - this might take a while..."
+doFlush
 
 doUnmount
 
