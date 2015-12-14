@@ -278,7 +278,7 @@ doDownloadPackage() {
 	local REPOSITORY="`printf "$2" | awk -F '/' '{ print $1 }'`"
 	local PACKAGE="`printf "$2" | awk -F '/' '{ print $2 }'`"
 
-	local PACKAGE_FILE="`curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>//g' | grep "$PACKAGE-.*xz[^.]" | awk '{ print \$1 }'`"
+	local PACKAGE_FILE="`curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>/ /g' | grep "$PACKAGE-.*xz[^.]" | awk '{ print \$1 }'`"
 	local PACKAGE_FILE_DOWNLOAD="$ARCH_LINUX_PACKAGES_URL$REPOSITORY/$PACKAGE_FILE"
 
 	doPrint ">>> [$1] $REPOSITORY/$PACKAGE ($PACKAGE_FILE_DOWNLOAD)"
