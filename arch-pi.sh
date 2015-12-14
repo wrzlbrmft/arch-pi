@@ -277,9 +277,22 @@ vm.swappiness=$OPTIMIZE_SWAPPINESS_VALUE
 __END__
 }
 
+doDownloadPackage() {
+	local REPOSITORY="`printf "$1" | awk -F '/' '{ print $1 }'`"
+	local PACKAGE="`printf "$1" | awk -F '/' '{ print $2 }'`"
+
+	local PACKAGE_FILE="`curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>//g' | grep "$PACKAGE-.*xz[^.]" | awk '{ print \$1 }'`"
+	local PACKAGE_FILE_DOWNLOAD="$ARCH_LINUX_PACKAGES_URL$REPOSITORY/$PACKAGE_FILE"
+
+	mkdir -p "root$DOWNLOAD_PACKAGE_SETS_PATH"
+	curl -L "$PACKAGE_FILE_DOWNLOAD" -o "root$DOWNLOAD_PACKAGE_SETS_PATH/$PACKAGE_FILE"
+}
+
 doDownloadPackageSets() {
 	for i in $DOWNLOAD_PACKAGE_SETS; do
-		echo "$i"
+		for j in ${PACKAGE_SET[$i]}; do
+			doDownloadPackage "$j"
+		done
 	done
 }
 
