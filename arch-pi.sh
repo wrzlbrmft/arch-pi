@@ -297,10 +297,10 @@ doDownloadPackageSets() {
 }
 
 doUnmount() {
-	umount boot
+	umount "$BOOT_DEVICE"
 	rmdir boot
 
-	umount root
+	umount "$ROOT_DEVICE"
 	rmdir root
 }
 
