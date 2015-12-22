@@ -200,7 +200,8 @@ doMount() {
 doDownloadArchLinux() {
 	if [ ! -f "`basename "$ARCH_LINUX_DOWNLOAD"`" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
 		rm -f "`basename "$ARCH_LINUX_DOWNLOAD"`"
-		curl -LO "$ARCH_LINUX_DOWNLOAD"
+		curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
+			-LO "$ARCH_LINUX_DOWNLOAD"
 	fi
 }
 
@@ -344,7 +345,8 @@ doDownloadPackage() {
 	doPrint ">>> [$1] $REPOSITORY/$PACKAGE ($PACKAGE_FILE_DOWNLOAD)"
 
 	mkdir -p "root$DOWNLOAD_PACKAGE_SETS_PATH"
-	curl -L "$PACKAGE_FILE_DOWNLOAD" -o "root$DOWNLOAD_PACKAGE_SETS_PATH/$PACKAGE_FILE"
+	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
+		-L "$PACKAGE_FILE_DOWNLOAD" -o "root$DOWNLOAD_PACKAGE_SETS_PATH/$PACKAGE_FILE"
 }
 
 doDownloadPackageSets() {
