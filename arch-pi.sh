@@ -231,7 +231,17 @@ FONT=$2
 __END__
 }
 
-doSetEthernet() {
+doSetEthernetDhcp() {
+	cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
+[Match]
+Name=$ETHERNET_INTERFACE
+
+[Network]
+DHCP=yes
+__END__
+}
+
+doSetEthernetStatic() {
 	cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
 [Match]
 Name=$ETHERNET_INTERFACE
@@ -340,7 +350,13 @@ doSetTimezone "$TIMEZONE"
 
 doSetConsole "$CONSOLE_KEYMAP" "$CONSOLE_FONT"
 
-[ "$SET_ETHERNET" == "yes" ] && doSetEthernet
+if [ "$SET_ETHERNET" == "yes" ]; then
+	if [ "$ETHERNET_DHCP" == "no" ]; then
+		doSetEthernetStatic
+	else
+		doSetEthernetDhcp
+	fi
+fi
 
 [ "$DISABLE_IPV6" == "yes" ] && doDisableIpv6
 

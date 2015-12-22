@@ -60,7 +60,7 @@ You may also want to change the following settings:
 * `HOSTNAME`
 * `TIMEZONE`
 * `CONSOLE_KEYMAP`
-* `SET_ETHERNET` -- and if set to `YES`, then also `ETHERNET_INTERFACE`, `ETHERNET_ADDRESS`, `ETHERNET_GATEWAY` and `ETHERNET_DNS`
+* `SET_ETHERNET` -- and if set to `YES`, then also `ETHERNET_INTERFACE`, `ETHERNET_DHCP` and probably `ETHERNET_ADDRESS`, `ETHERNET_GATEWAY` and `ETHERNET_DNS`
 
 Once you are done, save and close the configuration file.
 
