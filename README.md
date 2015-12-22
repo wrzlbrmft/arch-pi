@@ -59,7 +59,8 @@ You may also want to change the following settings:
 
 * `HOSTNAME`
 * `TIMEZONE`
-* `NETWORK_ADDRESS`, `NETWORK_GATEWAY` and `NETWORK_DNS`
+* `CONSOLE_KEYMAP`
+* `SET_ETHERNET` -- and if set to `YES`, then also `ETHERNET_INTERFACE`, `ETHERNET_ADDRESS`, `ETHERNET_GATEWAY` and `ETHERNET_DNS`
 
 Once you are done, save and close the configuration file.
 
