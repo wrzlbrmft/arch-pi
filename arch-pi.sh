@@ -231,19 +231,19 @@ FONT=$2
 __END__
 }
 
-doSetNetwork() {
-	cat > "root/etc/systemd/network/$NETWORK_INTERFACE.network" << __END__
+doSetEthernet() {
+	cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
 [Match]
-Name=$NETWORK_INTERFACE
+Name=$ETHERNET_INTERFACE
 
 [Network]
-DNS=$NETWORK_DNS
+DNS=$ETHERNET_DNS
 
 [Address]
-Address=$NETWORK_ADDRESS
+Address=$ETHERNET_ADDRESS
 
 [Route]
-Gateway=$NETWORK_GATEWAY
+Gateway=$ETHERNET_GATEWAY
 __END__
 }
 
@@ -340,7 +340,7 @@ doSetTimezone "$TIMEZONE"
 
 doSetConsole "$CONSOLE_KEYMAP" "$CONSOLE_FONT"
 
-[ "$SET_NETWORK" == "yes" ] && doSetNetwork
+[ "$SET_ETHERNET" == "yes" ] && doSetEthernet
 
 [ "$DISABLE_IPV6" == "yes" ] && doDisableIpv6
 
