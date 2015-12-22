@@ -257,6 +257,49 @@ Gateway=$ETHERNET_GATEWAY
 __END__
 }
 
+doSetWirelessDhcp() {
+	cat > "root/etc/netctl/$WIRELESS_INTERFACE" << __END__
+Interface=$WIRELESS_INTERFACE
+Connection=wireless
+Security=$WIRELESS_SECURITY
+IP=dhcp
+ESSID='$WIRELESS_ESSID'
+Key='$WIRELESS_KEY'
+Hidden=$WIRELESS_HIDDEN
+__END__
+
+	chmod 0600 "root/etc/netctl/$WIRELESS_INTERFACE"
+}
+
+doSetWirelessStatic() {
+	cat > "root/etc/netctl/$WIRELESS_INTERFACE" << __END__
+Interface=$WIRELESS_INTERFACE
+Connection=wireless
+Security=$WIRELESS_SECURITY
+IP=static
+Address=('$WIRELESS_ADDRESS')
+Gateway='$WIRELESS_GATEWAY'
+DNS=('$WIRELESS_DNS')
+ESSID='$WIRELESS_ESSID'
+Key='$WIRELESS_KEY'
+Hidden=$WIRELESS_HIDDEN
+__END__
+
+	chmod 0600 "root/etc/netctl/$WIRELESS_INTERFACE"
+}
+
+doEnableWireless() {
+	cat > "root/etc/systemd/system/netctl@$WIRELESS_INTERFACE.service" << __END__
+.include /usr/lib/systemd/system/netctl@.service
+
+[Unit]
+BindsTo=sys-subsystem-net-devices-$WIRELESS_INTERFACE.device
+After=sys-subsystem-net-devices-$WIRELESS_INTERFACE.device
+__END__
+
+	ln -s "/etc/systemd/system/netctl@$WIRELESS_INTERFACE.service" "root/etc/systemd/system/multi-user.target.wants/netctl@$WIRELESS_INTERFACE.service"
+}
+
 doDisableIpv6() {
 	cat > root/etc/sysctl.d/40-ipv6.conf << __END__
 ipv6.disable_ipv6=1
@@ -356,6 +399,16 @@ if [ "$SET_ETHERNET" == "yes" ]; then
 	else
 		doSetEthernetDhcp
 	fi
+fi
+
+if [ "$SET_WIRELESS" == "yes" ]; then
+	if [ "$WIRELESS_DHCP" == "no" ]; then
+		doSetWirelessStatic
+	else
+		doSetWirelessDhcp
+	fi
+
+	doEnableWireless
 fi
 
 [ "$DISABLE_IPV6" == "yes" ] && doDisableIpv6
