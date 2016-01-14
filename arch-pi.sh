@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-INSTALL_HOME=$( cd "`dirname "${BASH_SOURCE[0]}"`" && pwd )
-INSTALL_SCRIPT="`basename "${BASH_SOURCE[0]}"`"
-INSTALL_NAME="`printf "$INSTALL_SCRIPT" | awk -F '.' '{ print $1 }'`"
+SCRIPT_HOME=$( cd "`dirname "${BASH_SOURCE[0]}"`" && pwd )
+SCRIPT_FILENAME="`basename "${BASH_SOURCE[0]}"`"
+SCRIPT_NAME="`printf "$SCRIPT_FILENAME" | awk -F '.' '{ print $1 }'`"
 
 doPrintPrompt() {
-	printf "[$INSTALL_NAME] $*"
+	printf "[$SCRIPT_NAME] $*"
 }
 
 doPrint() {
@@ -13,7 +13,7 @@ doPrint() {
 }
 
 doPrintHelpMessage() {
-	printf "Usage: ./$INSTALL_SCRIPT [-h] [-c config]\n"
+	printf "Usage: ./$SCRIPT_FILENAME [-h] [-c config]\n"
 }
 
 while getopts :hc: opt; do
@@ -47,7 +47,7 @@ done
 shift $((OPTIND - 1))
 
 if [ -z "$INSTALL_CONFIG" ]; then
-	INSTALL_CONFIG="$INSTALL_HOME/$INSTALL_NAME.conf"
+	INSTALL_CONFIG="$SCRIPT_HOME/$SCRIPT_NAME.conf"
 fi
 
 if [ ! -f "$INSTALL_CONFIG" ]; then
