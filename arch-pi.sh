@@ -24,7 +24,7 @@ while getopts :hc: opt; do
 			;;
 
 		c)
-			INSTALL_CONFIG="$OPTARG"
+			SCRIPT_CONFIG="$OPTARG"
 			;;
 
 		:)
@@ -46,16 +46,16 @@ while getopts :hc: opt; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "$INSTALL_CONFIG" ]; then
-	INSTALL_CONFIG="$SCRIPT_HOME/$SCRIPT_NAME.conf"
+if [ -z "$SCRIPT_CONFIG" ]; then
+	SCRIPT_CONFIG="$SCRIPT_HOME/$SCRIPT_NAME.conf"
 fi
 
-if [ ! -f "$INSTALL_CONFIG" ]; then
-	printf "ERROR: Config file not found ('$INSTALL_CONFIG')\n"
+if [ ! -f "$SCRIPT_CONFIG" ]; then
+	printf "ERROR: Config file not found ('$SCRIPT_CONFIG')\n"
 	exit 1
 fi
 
-. "$INSTALL_CONFIG"
+. "$SCRIPT_CONFIG"
 
 # =================================================================================
 #    F U N C T I O N S
