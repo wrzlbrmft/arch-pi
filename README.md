@@ -46,8 +46,9 @@ curl -L https://github.com/wrzlbrmft/arch-pi/archive/master.tar.gz | tar zxvf -
 ```
 
 Insert the SD card on which you want to install Arch Linux, but make sure none
-of its partitions is mounted, otherwise unmount them. Then determine the device
-name of the SD card, e.g. `/dev/mmcblk0`, and open the configuration file:
+of its partitions is mounted, otherwise unmount them. Then use `lsblk` to
+determine the device name of the SD card, e.g. `/dev/mmcblk0`, and open the
+configuration file:
 
 ```
 vi arch-pi-master/arch-pi.conf
@@ -60,8 +61,8 @@ You may also want to change the following settings:
 * `HOSTNAME`
 * `TIMEZONE`
 * `CONSOLE_KEYMAP`
-* `SET_ETHERNET` -- if set to `YES`, then also the other `ETHERNET_*` settings
-* `SET_WIRELESS` -- if set to `YES`, then also the other `WIRELESS_*` settings
+* `SET_ETHERNET` -- if set to `YES`, then also check the other `ETHERNET_*` settings
+* `SET_WIRELESS` -- if set to `YES`, then also check the other `WIRELESS_*` settings
 
 Once you are done, save and close the configuration file.
 
@@ -82,7 +83,9 @@ The installation is done, once you see
 [arch-pi] Wake up, Neo... The installation is done!
 ```
 
-Then insert the SD card into your Raspberry Pi and start it up.
+Then insert the SD card into your
+Raspberry Pi
+and start it up.
 
 That's it!
 
