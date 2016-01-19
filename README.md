@@ -122,7 +122,7 @@ pacman -U /root/software/aaa.dist/*.tar.xz
 `DOWNLOAD_PACKAGE_SETS_PATH` setting.
 
 The installation is configured to automatically connect to the given wireless
-network, so simply reboot you are online.
+network. Simply reboot and you are online.
 
 ### Using an Alternative Configuration File
 
