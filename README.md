@@ -92,6 +92,38 @@ That's it!
 You can login as the default user `alarm` with the password `alarm`.
 The default root password is `root`.
 
+### Wireless Networking
+
+Unfortunately, the Arch Linux ARM distribution does not contain all packages
+required for wireless networking out of the box, namely:
+
+* `crda`
+* `dialog`
+* `iw`
+* `libnl`
+* `wireless-regdb`
+* `wpa_supplicant`
+
+However, during the installation process
+`arch-pi`
+downloads these packages to the SD card. While the configuration is already done
+according to the `SET_WIRELESS` and `WIRELESS_*` settings, you just have to
+install the packages to get wireless networking up and running.
+
+After booting your
+Raspberry Pi
+from the SD card, login as `root` (password is `root`) and type in:
+
+```
+pacman -U /root/software/aaa.dist/*.tar.xz
+```
+
+**NOTE:** The packages are in `/root/software/aaa.dist` unless you changed the
+`DOWNLOAD_PACKAGE_SETS_PATH` setting.
+
+The installation is configured to automatically connect to the given wireless
+network, so simply reboot you are online.
+
 ### Using an Alternative Configuration File
 
 You can use an alternative configuration file by passing it to the installation
