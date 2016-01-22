@@ -120,7 +120,7 @@ Raspberry Pi
 from the SD card, login as `root` (password is `root`) and type in:
 
 ```
-pacman -U /root/software/aaa.dist/*.tar.xz
+pacman -U --noconfirm /root/software/aaa.dist/*.tar.xz
 ```
 
 **NOTE:** The packages are in `/root/software/aaa.dist` unless you changed the
