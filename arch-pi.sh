@@ -380,6 +380,11 @@ vm.swappiness=$OPTIMIZE_SWAPPINESS_VALUE
 __END__
 }
 
+doCreatePackageSetsDirectory() {
+	local DIR="root`eval printf "$PACKAGE_SETS_PATH"`"
+	mkdir -p "$DIR"
+}
+
 doDownloadPackage() {
 	local REPOSITORY="`printf "$2" | awk -F '/' '{ print $1 }'`"
 	local PACKAGE_NAME="`printf "$2" | awk -F '/' '{ print $2 }'`"
@@ -389,9 +394,17 @@ doDownloadPackage() {
 
 	doPrint ">>> [$1] $REPOSITORY/$PACKAGE_NAME ($PACKAGE_URL)"
 
-	mkdir -p "root$PACKAGE_SETS_PATH"
+	doCreatePackageSetsDirectory
+
+	local _PWD="$PWD"
+
+	local DIR="root`eval printf "$SOFTWARE_PATH"`"
+	cd "$DIR"
+
 	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
-		-L "$PACKAGE_URL" -o "root$PACKAGE_SETS_PATH/$PACKAGE_FILE"
+		-LO "$PACKAGE_URL"
+
+	cd "$_PWD"
 }
 
 doDownloadPackageSets() {
