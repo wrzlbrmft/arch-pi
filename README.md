@@ -120,20 +120,14 @@ Raspberry Pi
 from the SD card, login as `root` (password is `root`) and type in:
 
 ```
-pacman -U --noconfirm /root/software/aaa.dist/*.tar.xz
+pacman -U --noconfirm /root/software/aaa.dist/*.tar.xz && reboot
 ```
 
 **NOTE:** The packages are in `/root/software/aaa.dist` unless you changed the
 `DOWNLOAD_PACKAGE_SETS_PATH` setting.
 
 The installation is configured to automatically connect to the given wireless
-network, therefore type in:
-
-```
-reboot
-```
-
-After a few seconds you are back and online.
+network. After the reboot you should be online.
 
 ### Using an Alternative Configuration File
 
