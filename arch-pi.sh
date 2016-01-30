@@ -324,6 +324,51 @@ PubkeyAcceptedKeyTypes=+ssh-dss
 __END__
 }
 
+doCreateYaourtDirectory() {
+	local DIR="root`eval printf "$YAOURT_PATH"`"
+	mkdir -p "$DIR"
+}
+
+doChmodYaourtDirectory() {
+	if [ ! -z "$YAOURT_CHXXX_PATH" ]; then
+		local DIR="root`eval printf "$YAOURT_CHXXX_PATH"`"
+		if [ ! -z "$YAOURT_CHMOD" ]; then
+			chmod -R "$YAOURT_CHMOD" "$DIR"
+		fi
+	fi
+}
+
+doChownYaourtDirectory() {
+	if [ ! -z "$YAOURT_CHXXX_PATH" ]; then
+		local DIR="root`eval printf "$YAOURT_CHXXX_PATH"`"
+		if [ ! -z "$YAOURT_CHOWN" ]; then
+			chown -R "$YAOURT_CHOWN" "$DIR"
+		fi
+	fi
+}
+
+doDownloadYaourt() {
+	doCreateYaourtDirectory
+	doChmodYaourtDirectory
+
+	local _PWD="$PWD"
+
+	local DIR="root`eval printf "$YAOURT_PATH"`"
+	cd "$DIR"
+
+	local URL="$YAOURT_PACKAGE_QUERY_URL"
+	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
+		-LO "$URL"
+
+	URL="$YAOURT_YAOURT_URL"
+	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
+		-LO "$URL"
+
+	cd "$_PWD"
+
+	doChownYaourtDirectory
+}
+
 doSymlinkHashCommands() {
 	ln -s /usr/bin/md5sum root/usr/local/bin/md5
 	ln -s /usr/bin/sha1sum root/usr/local/bin/sha1
@@ -419,6 +464,8 @@ fi
 [ "$ROOT_USER_BASH_LOGOUT_CLEAR" == "yes" ] && doBashLogoutClear
 
 [ "$SSH_ACCEPT_KEY_TYPE_SSH_DSS" == "yes" ] && doSshAcceptKeyTypeSshDss
+
+[ "$DOWNLOAD_YAOURT" == "yes" ] && doDownloadYaourt
 
 [ "$SYMLINK_HASH_COMMANDS" == "yes" ] && doSymlinkHashCommands
 
