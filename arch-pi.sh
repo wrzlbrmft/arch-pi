@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-SCRIPT_HOME=$( cd "`dirname "${BASH_SOURCE[0]}"`" && pwd )
-SCRIPT_FILENAME="`basename "${BASH_SOURCE[0]}"`"
-SCRIPT_NAME="`printf "$SCRIPT_FILENAME" | awk -F '.' '{ print $1 }'`"
+SCRIPT_PATH=$( cd "`dirname "${BASH_SOURCE[0]}"`" && pwd )
+SCRIPT_FILE="`basename "${BASH_SOURCE[0]}"`"
+SCRIPT_NAME="`printf "$SCRIPT_FILE" | awk -F '.' '{ print $1 }'`"
 
 doPrintPrompt() {
 	printf "[$SCRIPT_NAME] $*"
@@ -13,7 +13,7 @@ doPrint() {
 }
 
 doPrintHelpMessage() {
-	printf "Usage: ./$SCRIPT_FILENAME [-h] [-c config]\n"
+	printf "Usage: ./$SCRIPT_FILE [-h] [-c config]\n"
 }
 
 while getopts :hc: opt; do
@@ -24,7 +24,7 @@ while getopts :hc: opt; do
 			;;
 
 		c)
-			SCRIPT_CONFIG="$OPTARG"
+			SCRIPT_CONF="$OPTARG"
 			;;
 
 		:)
@@ -46,16 +46,16 @@ while getopts :hc: opt; do
 done
 shift $((OPTIND - 1))
 
-if [ -z "$SCRIPT_CONFIG" ]; then
-	SCRIPT_CONFIG="$SCRIPT_HOME/$SCRIPT_NAME.conf"
+if [ -z "$SCRIPT_CONF" ]; then
+	SCRIPT_CONF="$SCRIPT_PATH/$SCRIPT_NAME.conf"
 fi
 
-if [ ! -f "$SCRIPT_CONFIG" ]; then
-	printf "ERROR: Config file not found ('$SCRIPT_CONFIG')\n"
+if [ ! -f "$SCRIPT_CONF" ]; then
+	printf "ERROR: Config file not found ('$SCRIPT_CONF')\n"
 	exit 1
 fi
 
-source "$SCRIPT_CONFIG"
+source "$SCRIPT_CONF"
 
 # =================================================================================
 #    F U N C T I O N S
