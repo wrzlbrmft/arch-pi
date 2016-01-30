@@ -88,7 +88,7 @@ doSelectRaspberryPi() {
 	doPrint "Installing for ${RASPBERRY_PI[$i]}"
 
 	let i=i+1
-	ARCH_LINUX_DOWNLOAD="${RASPBERRY_PI[$i]}"
+	ARCH_LINUX_DOWNLOAD_URL="${RASPBERRY_PI[$i]}"
 
 	let i=i+1
 	ARCH_LINUX_PACKAGES_URL="${RASPBERRY_PI[$i]}"
@@ -112,10 +112,10 @@ doConfirmInstall() {
 }
 
 doDownloadArchLinux() {
-	if [ ! -f "`basename "$ARCH_LINUX_DOWNLOAD"`" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
-		rm -f "`basename "$ARCH_LINUX_DOWNLOAD"`"
+	if [ ! -f "`basename "$ARCH_LINUX_DOWNLOAD_URL"`" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
+		rm -f "`basename "$ARCH_LINUX_DOWNLOAD_URL"`"
 		curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
-			-LO "$ARCH_LINUX_DOWNLOAD"
+			-LO "$ARCH_LINUX_DOWNLOAD_URL"
 	fi
 }
 
@@ -206,7 +206,7 @@ doMount() {
 }
 
 doUnpackArchLinux() {
-	tar xvf "`basename "$ARCH_LINUX_DOWNLOAD"`" -C root -p
+	tar xvf "`basename "$ARCH_LINUX_DOWNLOAD_URL"`" -C root -p
 }
 
 doFinalizeBoot() {
