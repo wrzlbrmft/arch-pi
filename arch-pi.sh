@@ -389,9 +389,9 @@ doDownloadPackage() {
 
 	doPrint ">>> [$1] $REPOSITORY/$PACKAGE_NAME ($PACKAGE_URL)"
 
-	mkdir -p "root$DOWNLOAD_PACKAGE_SETS_PATH"
+	mkdir -p "root$PACKAGE_SETS_PATH"
 	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
-		-L "$PACKAGE_URL" -o "root$DOWNLOAD_PACKAGE_SETS_PATH/$PACKAGE_FILE"
+		-L "$PACKAGE_URL" -o "root$PACKAGE_SETS_PATH/$PACKAGE_FILE"
 }
 
 doDownloadPackageSets() {

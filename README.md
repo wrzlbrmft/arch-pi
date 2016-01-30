@@ -124,7 +124,7 @@ pacman -U --noconfirm /root/software/aaa.dist/*.tar.xz && reboot
 ```
 
 **NOTE:** The packages are in `/root/software/aaa.dist` unless you changed the
-`DOWNLOAD_PACKAGE_SETS_PATH` setting.
+`PACKAGE_SETS_PATH` setting.
 
 The installation is configured to automatically connect to the given wireless
 network. After the reboot you should be online.
