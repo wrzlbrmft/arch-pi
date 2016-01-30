@@ -382,16 +382,16 @@ __END__
 
 doDownloadPackage() {
 	local REPOSITORY="`printf "$2" | awk -F '/' '{ print $1 }'`"
-	local PACKAGE="`printf "$2" | awk -F '/' '{ print $2 }'`"
+	local PACKAGE_NAME="`printf "$2" | awk -F '/' '{ print $2 }'`"
 
-	local PACKAGE_FILE="`curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>/ /g' | grep "$PACKAGE-.*xz[^.]" | awk '{ print \$1 }'`"
-	local PACKAGE_FILE_DOWNLOAD="$ARCH_LINUX_PACKAGES_URL$REPOSITORY/$PACKAGE_FILE"
+	local PACKAGE_FILE="`curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>/ /g' | grep "$PACKAGE_NAME-.*xz[^.]" | awk '{ print \$1 }'`"
+	local PACKAGE_URL="$ARCH_LINUX_PACKAGES_URL$REPOSITORY/$PACKAGE_FILE"
 
-	doPrint ">>> [$1] $REPOSITORY/$PACKAGE ($PACKAGE_FILE_DOWNLOAD)"
+	doPrint ">>> [$1] $REPOSITORY/$PACKAGE_NAME ($PACKAGE_URL)"
 
 	mkdir -p "root$DOWNLOAD_PACKAGE_SETS_PATH"
 	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
-		-L "$PACKAGE_FILE_DOWNLOAD" -o "root$DOWNLOAD_PACKAGE_SETS_PATH/$PACKAGE_FILE"
+		-L "$PACKAGE_URL" -o "root$DOWNLOAD_PACKAGE_SETS_PATH/$PACKAGE_FILE"
 }
 
 doDownloadPackageSets() {
