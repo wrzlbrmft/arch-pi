@@ -55,7 +55,7 @@ if [ ! -f "$SCRIPT_CONFIG" ]; then
 	exit 1
 fi
 
-. "$SCRIPT_CONFIG"
+source "$SCRIPT_CONFIG"
 
 # =================================================================================
 #    F U N C T I O N S
