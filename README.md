@@ -129,6 +129,78 @@ pacman -U --noconfirm /root/software/aaa.dist/*.tar.xz && reboot
 The installation is configured to automatically connect to the given wireless
 network. After the reboot you should be online.
 
+### Installing Yaourt
+
+By default,
+`arch-pi`
+also downloads the packages required for installing
+[Yaourt](https://github.com/archlinuxfr/yaourt), unless you changed the
+`DOWNLOAD_YAOURT` setting. Yaourt in turn allows you to install packages from
+the [AUR](https://aur.archlinux.org/).
+
+Before you can install Yaourt, you first have to set up a build environment, so
+login as `root` (password is `root`) and type in:
+
+```
+pacman -S --noconfirm --needed base-devel sudo
+```
+
+Next, configure `sudo`, allowing members of the group `wheel` to use it by
+editing the `sudoers` file:
+
+```
+nano -w /etc/sudoers
+```
+
+Remove the leading `#` from the following line to uncomment it:
+
+```
+%wheel ALL=(ALL) ALL
+```
+
+Save the `sudoers` file by pressing `Ctrl-X`, `y`, `Enter` and then logout:
+
+```
+logout
+```
+
+Login again, but this time as the user `alarm` (password is `alarm`), and change
+to the directory containing the Yaourt packages:
+
+```
+cd /home/alarm/software/aaa.dist
+```
+
+**NOTE:** The Yaourt packages are in `/home/alarm/software/aaa.dist` unless you
+changed the `YAOURT_PATH` setting.
+
+Now install Yaourt:
+
+```
+tar xvf package-query.tar.gz
+cd package-query
+makepkg -i -s --noconfirm --needed
+
+cd ..
+
+tar xvf yaourt.tar.gz
+cd yaourt
+makepkg -i -s --noconfirm --needed
+
+cd ..
+```
+
+After Yaourt is installed, it's probably a good idea to check for available
+package updates:
+
+```
+yaourt -Syyua
+```
+
+If there are, just follow the instructions on the screen.
+
+That's it!
+
 ### Using an Alternative Configuration File
 
 You can use an alternative configuration file by passing it to the installation
