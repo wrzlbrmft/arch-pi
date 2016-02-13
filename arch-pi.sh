@@ -398,7 +398,7 @@ doDownloadPackage() {
 
 	local _PWD="$PWD"
 
-	local DIR="root`eval printf "$SOFTWARE_PATH"`"
+	local DIR="root`eval printf "$PACKAGE_SETS_PATH"`"
 	cd "$DIR"
 
 	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
