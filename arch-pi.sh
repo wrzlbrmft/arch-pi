@@ -61,15 +61,15 @@ source "$SCRIPT_CONF"
 #    F U N C T I O N S
 # =================================================================================
 
-doSelectRaspberryPi() {
+doSelectHardwareModel() {
 	local i=0
 
-	if [ -z "$RASPBERRY_PI_SELECT" ]; then
-		doPrint "Select Raspberry Pi"
+	if [ -z "$HARDWARE_MODEL_SELECT" ]; then
+		doPrint "Select hardware model"
 
 		local j=1
-		while [ "$i" -lt "${#RASPBERRY_PI[@]}" ]; do
-			doPrint "$j = ${RASPBERRY_PI[$i]}"
+		while [ "$i" -lt "${#HARDWARE_MODEL[@]}" ]; do
+			doPrint "$j = ${HARDWARE_MODEL[$i]}"
 			let i=i+3
 			let j=j+1
 		done
@@ -80,18 +80,18 @@ doSelectRaspberryPi() {
 			printf "ERROR: Invalid selection ('$i')\n"
 			exit 1
 		else
-			RASPBERRY_PI_SELECT="$i"
+			HARDWARE_MODEL_SELECT="$i"
 		fi
 	fi
 
-	let i=$RASPBERRY_PI_SELECT*3-3
-	doPrint "Installing for ${RASPBERRY_PI[$i]}"
+	let i=$HARDWARE_MODEL_SELECT*3-3
+	doPrint "Installing for ${HARDWARE_MODEL[$i]}"
 
 	let i=i+1
-	ARCH_LINUX_DOWNLOAD_URL="${RASPBERRY_PI[$i]}"
+	ARCH_LINUX_DOWNLOAD_URL="${HARDWARE_MODEL[$i]}"
 
 	let i=i+1
-	ARCH_LINUX_PACKAGES_URL="${RASPBERRY_PI[$i]}"
+	ARCH_LINUX_PACKAGES_URL="${HARDWARE_MODEL[$i]}"
 }
 
 doConfirmInstall() {
@@ -428,7 +428,7 @@ doUnmount() {
 #    M A I N
 # =================================================================================
 
-doSelectRaspberryPi
+doSelectHardwareModel
 
 doConfirmInstall
 
