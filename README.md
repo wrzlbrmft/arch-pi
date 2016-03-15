@@ -3,12 +3,15 @@ A simple script installing [Arch Linux](https://www.archlinux.org/) on an SD
 card for the
 [Raspberry Pi](https://www.raspberrypi.org/products/).
 
-The script is capable of installing both the ARMv6 and ARMv7 version of Arch
-Linux supporting all current models of the Raspberry Pi, including the very
-latest [Raspberry Pi Zero](https://www.raspberrypi.org/blog/raspberry-pi-zero/).
+The script supports the following hardware models of the
+Raspberry Pi:
 
 * Raspberry Pi Model A/A+/B/B+, Compute Module, Zero (ARMv6)
 * Raspberry Pi 2 Model B (ARMv7)
+* Raspberry Pi 3 Model B (ARMv8, *but using ARMv7*)
+
+**NOTE:** For the time being, the Raspberry Pi 3 Model B will install the ARMv7
+version of Arch Linux also used by the Raspberry Pi 2 Model B.
 
 The installation procedure pretty much matches the Installation Guides from
 [Arch Linux ARM](http://archlinuxarm.org/),
