@@ -105,11 +105,8 @@ The default root password is `root`.
 Unfortunately, the Arch Linux ARM distribution does not contain all packages
 required for wireless networking out of the box, namely:
 
-* `crda`
-* `dialog`
 * `iw`
 * `libnl`
-* `wireless-regdb`
 * `wpa_supplicant`
 
 However, during the installation process
