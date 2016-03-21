@@ -108,7 +108,7 @@ Before you can install Yaourt, you first have to set up a build environment, so
 login as `root` (password is `root`) and type in:
 
 ```
-pacman -S --noconfirm --needed base-devel sudo
+pacman -Syy --noconfirm --needed base-devel sudo
 ```
 
 Next, configure `sudo`, allowing members of the group `wheel` to use it by
