@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-SCRIPT_PATH=$( cd "`dirname "${BASH_SOURCE[0]}"`" && pwd )
-SCRIPT_FILE="`basename "${BASH_SOURCE[0]}"`"
-SCRIPT_NAME="`printf "$SCRIPT_FILE" | awk -F '.' '{ print $1 }'`"
+SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_FILE="$(basename "${BASH_SOURCE[0]}")"
+SCRIPT_NAME="$(printf "$SCRIPT_FILE" | cut -d. -f1)"
 
 doPrintPrompt() {
 	printf "[$SCRIPT_NAME] $*"
@@ -112,8 +112,8 @@ doConfirmInstall() {
 }
 
 doDownloadArchLinux() {
-	if [ ! -f "`basename "$ARCH_LINUX_DOWNLOAD_URL"`" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
-		rm -f "`basename "$ARCH_LINUX_DOWNLOAD_URL"`"
+	if [ ! -f "$(basename "$ARCH_LINUX_DOWNLOAD_URL")" ] || [ "$ARCH_LINUX_DOWNLOAD_FORCE" == "yes" ]; then
+		rm -f "$(basename "$ARCH_LINUX_DOWNLOAD_URL")"
 		curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
 			-LO "$ARCH_LINUX_DOWNLOAD_URL"
 	fi
@@ -206,7 +206,7 @@ doMount() {
 }
 
 doUnpackArchLinux() {
-	tar xvf "`basename "$ARCH_LINUX_DOWNLOAD_URL"`" -C root -p
+	tar xvf "$(basename "$ARCH_LINUX_DOWNLOAD_URL")" -C root -p
 }
 
 doFinalizeBoot() {
@@ -325,13 +325,13 @@ __END__
 }
 
 doCreateYaourtDirectory() {
-	local DIR="root`eval printf "$YAOURT_PATH"`"
+	local DIR="root$(eval printf "$YAOURT_PATH")"
 	mkdir -p "$DIR"
 }
 
 doChmodYaourtDirectory() {
 	if [ ! -z "$YAOURT_CHXXX_PATH" ]; then
-		local DIR="root`eval printf "$YAOURT_CHXXX_PATH"`"
+		local DIR="root$(eval printf "$YAOURT_CHXXX_PATH")"
 		if [ ! -z "$YAOURT_CHMOD" ]; then
 			chmod -R "$YAOURT_CHMOD" "$DIR"
 		fi
@@ -340,7 +340,7 @@ doChmodYaourtDirectory() {
 
 doChownYaourtDirectory() {
 	if [ ! -z "$YAOURT_CHXXX_PATH" ]; then
-		local DIR="root`eval printf "$YAOURT_CHXXX_PATH"`"
+		local DIR="root$(eval printf "$YAOURT_CHXXX_PATH")"
 		if [ ! -z "$YAOURT_CHOWN" ]; then
 			chown -R "$YAOURT_CHOWN" "$DIR"
 		fi
@@ -353,7 +353,7 @@ doDownloadYaourt() {
 
 	local _PWD="$PWD"
 
-	local DIR="root`eval printf "$YAOURT_PATH"`"
+	local DIR="root$(eval printf "$YAOURT_PATH")"
 	cd "$DIR"
 
 	local URL="$YAOURT_PACKAGE_QUERY_URL"
@@ -381,15 +381,15 @@ __END__
 }
 
 doCreatePackageSetsDirectory() {
-	local DIR="root`eval printf "$PACKAGE_SETS_PATH"`"
+	local DIR="root$(eval printf "$PACKAGE_SETS_PATH")"
 	mkdir -p "$DIR"
 }
 
 doDownloadPackage() {
-	local REPOSITORY="`printf "$2" | awk -F '/' '{ print $1 }'`"
-	local PACKAGE_NAME="`printf "$2" | awk -F '/' '{ print $2 }'`"
+	local REPOSITORY="$(printf "$2" | cut -d/ -f1)"
+	local PACKAGE_NAME="$(printf "$2" | cut -d/ -f2)"
 
-	local PACKAGE_FILE="`curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>/ /g' | grep "$PACKAGE_NAME-.*xz[^.]" | awk '{ print \$1 }'`"
+	local PACKAGE_FILE="$(curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>/ /g' | grep "$PACKAGE_NAME-.*xz[^.]" | awk '{ print \$1 }')"
 	local PACKAGE_URL="$ARCH_LINUX_PACKAGES_URL$REPOSITORY/$PACKAGE_FILE"
 
 	doPrint ">>> [$1] $REPOSITORY/$PACKAGE_NAME ($PACKAGE_URL)"
@@ -398,7 +398,7 @@ doDownloadPackage() {
 
 	local _PWD="$PWD"
 
-	local DIR="root`eval printf "$PACKAGE_SETS_PATH"`"
+	local DIR="root$(eval printf "$PACKAGE_SETS_PATH")"
 	cd "$DIR"
 
 	curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
