@@ -389,7 +389,7 @@ doDownloadPackage() {
 	local REPOSITORY="$(printf "$2" | cut -d/ -f1)"
 	local PACKAGE_NAME="$(printf "$2" | cut -d/ -f2)"
 
-	local PACKAGE_FILE="$(curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>/ /g' | grep "$PACKAGE_NAME-.*xz[^.]" | awk '{ print \$1 }')"
+	local PACKAGE_FILE="$(curl -sL "$ARCH_LINUX_PACKAGES_URL$REPOSITORY" | sed -e 's/<[^>]*>/ /g' | grep "$PACKAGE_NAME-.*xz[^.]" | awk '{ print $1 }')"
 	local PACKAGE_URL="$ARCH_LINUX_PACKAGES_URL$REPOSITORY/$PACKAGE_FILE"
 
 	doPrint ">>> [$1] $REPOSITORY/$PACKAGE_NAME ($PACKAGE_URL)"
