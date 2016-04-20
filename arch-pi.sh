@@ -305,6 +305,11 @@ doDisableIpv6() {
 	cat > root/etc/sysctl.d/40-ipv6.conf << __END__
 ipv6.disable_ipv6=1
 __END__
+
+cat >> root/etc/dhcpcd.conf << __END__
+noipv6rs
+noipv6
+__END__
 }
 
 doBashLogoutClear() {
