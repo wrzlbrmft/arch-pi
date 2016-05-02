@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT_FILE="$(basename "${BASH_SOURCE[0]}")"
-SCRIPT_NAME="$(printf "$SCRIPT_FILE" | cut -d. -f1)"
+SCRIPT_NAME="${SCRIPT_FILE%.*}"
 
 doPrintPrompt() {
 	printf "[$SCRIPT_NAME] $*"
