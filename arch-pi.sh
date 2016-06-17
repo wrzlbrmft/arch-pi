@@ -61,6 +61,13 @@ source "$SCRIPT_CONF"
 #    F U N C T I O N S
 # =================================================================================
 
+doCheckInstallDevice() {
+	if [ ! -b "$INSTALL_DEVICE" ]; then
+		printf "ERROR: INSTALL_DEVICE is not a block device ('$INSTALL_DEVICE')\n"
+		exit 1
+	fi
+}
+
 doSelectHardwareModel() {
 	local i=0
 
@@ -442,6 +449,8 @@ doUnmount() {
 # =================================================================================
 #    M A I N
 # =================================================================================
+
+doCheckInstallDevice
 
 doSelectHardwareModel
 
