@@ -5,7 +5,7 @@ SCRIPT_FILE="$(basename "${BASH_SOURCE[0]}")"
 SCRIPT_NAME="${SCRIPT_FILE%.*}"
 
 doPrintPrompt() {
-	printf "[$SCRIPT_NAME] $*"
+	printf "[%s] %s" "$SCRIPT_NAME" "$*"
 }
 
 doPrint() {
@@ -13,7 +13,7 @@ doPrint() {
 }
 
 doPrintHelpMessage() {
-	printf "Usage: ./$SCRIPT_FILE [-h] [-c config]\n"
+	printf "Usage: ./%s [-h] [-c config]\n" "$SCRIPT_FILE"
 }
 
 while getopts :hc: opt; do
@@ -39,7 +39,7 @@ while getopts :hc: opt; do
 			;;
 
 		\?)
-			printf "ERROR: Invalid option ('-$OPTARG')\n"
+			printf "ERROR: Invalid option ('-%s')\n" "$OPTARG"
 			exit 1
 			;;
 	esac
@@ -51,7 +51,7 @@ if [ -z "$SCRIPT_CONF" ]; then
 fi
 
 if [ ! -f "$SCRIPT_CONF" ]; then
-	printf "ERROR: Config file not found ('$SCRIPT_CONF')\n"
+	printf "ERROR: Config file not found ('%s')\n" "$SCRIPT_CONF"
 	exit 1
 fi
 
@@ -63,7 +63,7 @@ source "$SCRIPT_CONF"
 
 doCheckInstallDevice() {
 	if [ ! -b "$INSTALL_DEVICE" ]; then
-		printf "ERROR: INSTALL_DEVICE is not a block device ('$INSTALL_DEVICE')\n"
+		printf "ERROR: INSTALL_DEVICE is not a block device ('%s')\n" "$INSTALL_DEVICE"
 		exit 1
 	fi
 }
@@ -82,9 +82,9 @@ doSelectHardwareModel() {
 		done
 
 		doPrintPrompt "> "
-		read i
+		read -r i
 		if [[ ! $i =~ ^[0-9]+$ ]] || [ ! "$i" -gt "0" ] || [ ! "$i" -lt "$j" ]; then
-			printf "ERROR: Invalid selection ('$i')\n"
+			printf "ERROR: Invalid selection ('%s')\n" "$i"
 			exit 1
 		else
 			HARDWARE_MODEL_SELECT="$i"
@@ -106,7 +106,7 @@ doConfirmInstall() {
 	doPrint "Enter 'YES' (in capitals) to confirm and start the installation."
 
 	doPrintPrompt "> "
-	read i
+	read -r i
 	if [ "$i" != "YES" ]; then
 		doPrint "Aborted."
 		exit 0
