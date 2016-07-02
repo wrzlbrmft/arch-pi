@@ -5,7 +5,7 @@ SCRIPT_FILE="$(basename "${BASH_SOURCE[0]}")"
 SCRIPT_NAME="${SCRIPT_FILE%.*}"
 
 doPrintPrompt() {
-	printf "[%s] %s" "$SCRIPT_NAME" "$*"
+	printf "[%s] $*" "$SCRIPT_NAME"
 }
 
 doPrint() {
