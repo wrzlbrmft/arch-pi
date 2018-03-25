@@ -6,7 +6,7 @@ card for the
 The script supports the following hardware models of the
 Raspberry Pi:
 
-* Raspberry Pi Model A/A+/B/B+, Compute Module, Zero (ARMv6)
+* Raspberry Pi Model A/A+/B/B+, Compute Module, Zero, Zero W (ARMv6)
 * Raspberry Pi 2 Model B (ARMv7)
 * Raspberry Pi 3 Model B (ARMv8, *but using ARMv7*)
 
