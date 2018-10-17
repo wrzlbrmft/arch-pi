@@ -61,6 +61,13 @@ source "$SCRIPT_CONF"
 #    F U N C T I O N S
 # =================================================================================
 
+doCheckRootPrivileges() {
+    if [ "${USER}" != "root" ]; then
+        printf "ERROR: This script requires root privileges\n"
+        exit 1
+    fi
+}
+
 doCheckInstallDevice() {
     if [ ! -b "$INSTALL_DEVICE" ]; then
         printf "ERROR: INSTALL_DEVICE is not a block device ('%s')\n" "$INSTALL_DEVICE"
@@ -450,6 +457,8 @@ doUnmount() {
 # =================================================================================
 #    M A I N
 # =================================================================================
+
+doCheckRootPrivileges
 
 doCheckInstallDevice
 
