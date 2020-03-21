@@ -354,6 +354,47 @@ PubkeyAcceptedKeyTypes=+ssh-dss
 __END__
 }
 
+doCreateYayDirectory() {
+    local DIR="root$(eval printf "$YAY_PATH")"
+    mkdir -p "$DIR"
+}
+
+doChmodYayDirectory() {
+    if [ ! -z "$YAY_CHXXX_PATH" ]; then
+        local DIR="root$(eval printf "$YAY_CHXXX_PATH")"
+        if [ ! -z "$YAY_CHMOD" ]; then
+            chmod -R "$YAY_CHMOD" "$DIR"
+        fi
+    fi
+}
+
+doChownYayDirectory() {
+    if [ ! -z "$YAY_CHXXX_PATH" ]; then
+        local DIR="root$(eval printf "$YAY_CHXXX_PATH")"
+        if [ ! -z "$YAY_CHOWN" ]; then
+            chown -R "$YAY_CHOWN" "$DIR"
+        fi
+    fi
+}
+
+doDownloadYay() {
+    doCreateYayDirectory
+    doChmodYayDirectory
+
+    local _PWD="$PWD"
+
+    local DIR="root$(eval printf "$YAY_PATH")"
+    cd "$DIR"
+
+    local URL="$YAY_YAY_URL"
+    curl --retry 999 --retry-delay 0 --retry-max-time 300 --speed-time 10 --speed-limit 0 \
+        -LO "$URL"
+
+    cd "$_PWD"
+
+    doChownYayDirectory
+}
+
 doCreateYaourtDirectory() {
     local DIR="root$(eval printf "$YAOURT_PATH")"
     mkdir -p "$DIR"
@@ -511,6 +552,8 @@ fi
 [ "$ROOT_USER_BASH_LOGOUT_CLEAR" == "yes" ] && doBashLogoutClear
 
 [ "$SSH_ACCEPT_KEY_TYPE_SSH_DSS" == "yes" ] && doSshAcceptKeyTypeSshDss
+
+[ "$DOWNLOAD_YAY" == "yes" ] && doDownloadYay
 
 [ "$DOWNLOAD_YAOURT" == "yes" ] && doDownloadYaourt
 
