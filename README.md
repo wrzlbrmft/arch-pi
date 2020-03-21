@@ -95,17 +95,19 @@ That's it!
 You can login as the default user `alarm` with the password `alarm`.
 The default root password is `root`.
 
-### Installing Yaourt
+### Installing Yay or Yaourt
 
-By default,
 `arch-pi`
-also downloads the packages required for installing
-[Yaourt](https://github.com/archlinuxfr/yaourt), unless you changed the
-`DOWNLOAD_YAOURT` setting. Yaourt in turn allows you to install packages from
-the [AUR](https://aur.archlinux.org/).
+can also download the packages required for installing
+[Yay](https://github.com/Jguer/yay) or
+[Yaourt](https://github.com/archlinuxfr/yaourt), by changing the `DOWNLOAD_YAY`
+or `DOWNLOAD_YAOURT` settings. Both Yay and Yaourt in turn allow you to install
+packages from the [AUR](https://aur.archlinux.org/).
 
-Before you can install Yaourt, you first have to set up a build environment, so
-login as `root` (password is `root`) and type in:
+**NOTE:** Yaourt is not maintained anymore.
+
+Before you can install Yay or Yaourt, you first have to set up a build
+environment, so login as `root` (password is `root`) and type in:
 
 ```
 pacman -Syy --noconfirm --needed base-devel sudo
@@ -137,10 +139,20 @@ to the directory containing the Yaourt packages:
 cd /home/alarm/software/aaa.dist
 ```
 
-**NOTE:** The Yaourt packages are in `/home/alarm/software/aaa.dist` unless you
-changed the `YAOURT_PATH` setting.
+**NOTE:** The Yay and Yaourt packages are in `/home/alarm/software/aaa.dist`
+unless you changed the `YAY_PATH` or `YAOURT_PATH` settings.
 
-Now install Yaourt:
+To install Yay:
+
+```
+tar xvf yay.tar.gz
+cd yay
+makepkg -i -s --noconfirm --needed
+
+cd ..
+```
+
+To install Yaourt:
 
 ```
 tar xvf package-query.tar.gz
@@ -156,8 +168,16 @@ makepkg -i -s --noconfirm --needed
 cd ..
 ```
 
-After Yaourt is installed, it's probably a good idea to check for available
-package updates:
+After Yay or Yaourt is installed, it's probably a good idea to check for
+available package updates:
+
+Using Yay:
+
+```
+yay -Syyu
+```
+
+Using Yaourt:
 
 ```
 yaourt -Syyua
