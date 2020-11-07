@@ -248,87 +248,85 @@ __END__
 }
 
 doSetEthernetDhcp() {
-    cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
-[Match]
-Name=$ETHERNET_INTERFACE
-
-[Network]
-DHCP=yes
+    cat > "root/etc/netctl/ethernet" << __END__
+Interface=$ETHERNET_INTERFACE
+Connection=ethernet
+IP=dhcp
 __END__
-
-    if [ "$DISABLE_IPV6" == "yes" ]; then
-        cat >> "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
-IPv6AcceptRouterAdvertisements=0
-__END__
-    fi
 }
 
 doSetEthernetStatic() {
-    cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
-[Match]
-Name=$ETHERNET_INTERFACE
-
-[Network]
-DNS=$ETHERNET_DNS
+    cat > "root/etc/netctl/ethernet" << __END__
+Interface=$ETHERNET_INTERFACE
+Connection=ethernet
+IP=static
+Address=('$ETHERNET_ADDRESS')
+Gateway='$ETHERNET_GATEWAY'
+DNS=('$ETHERNET_DNS')
 __END__
+}
 
-    if [ "$DISABLE_IPV6" == "yes" ]; then
-        cat >> "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
-IPv6AcceptRouterAdvertisements=0
-__END__
-    fi
+doEnableEthernet() {
+    rm -f "root/etc/systemd/network/eth0.network"
 
-    cat >> "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
+    chmod 0600 "root/etc/netctl/ethernet"
 
-[Address]
-Address=$ETHERNET_ADDRESS
-
-[Route]
-Gateway=$ETHERNET_GATEWAY
+    ln -s "/usr/lib/systemd/system/netctl@.service" "root/etc/systemd/system/multi-user.target.wants/netctl@ethernet.service"
+    mkdir -p "root/etc/systemd/system/netctl@ethernet.service.d"
+    cat > "root/etc/systemd/system/netctl@ethernet.service.d/profile.conf" << __END__
+[Unit]
+BindsTo=sys-subsystem-net-devices-$ETHERNET_INTERFACE.device
+After=sys-subsystem-net-devices-$ETHERNET_INTERFACE.device
 __END__
 }
 
 doSetWirelessDhcp() {
-    cat > "root/etc/netctl/$WIRELESS_INTERFACE" << __END__
+    cat > "root/etc/netctl/wireless" << __END__
 Interface=$WIRELESS_INTERFACE
 Connection=wireless
 Security=$WIRELESS_SECURITY
 IP=dhcp
 ESSID='$WIRELESS_ESSID'
 Key='$WIRELESS_KEY'
-Hidden=$WIRELESS_HIDDEN
 __END__
 
-    chmod 0600 "root/etc/netctl/$WIRELESS_INTERFACE"
+    if [ "WIRELESS_HIDDEN" == "yes" ]; then
+        cat >> "root/etc/netctl/wireless" << __END__
+Hidden=yes
+__END__
+    fi
 }
 
 doSetWirelessStatic() {
-    cat > "root/etc/netctl/$WIRELESS_INTERFACE" << __END__
+    cat > "root/etc/netctl/wireless" << __END__
 Interface=$WIRELESS_INTERFACE
 Connection=wireless
 Security=$WIRELESS_SECURITY
-IP=static
-Address=('$WIRELESS_ADDRESS')
-Gateway='$WIRELESS_GATEWAY'
-DNS=('$WIRELESS_DNS')
 ESSID='$WIRELESS_ESSID'
 Key='$WIRELESS_KEY'
-Hidden=$WIRELESS_HIDDEN
+IP=static
+Address='$WIRELESS_ADDRESS'
+Gateway='$WIRELESS_GATEWAY'
+DNS=('$WIRELESS_DNS')
 __END__
 
-    chmod 0600 "root/etc/netctl/$WIRELESS_INTERFACE"
+    if [ "WIRELESS_HIDDEN" == "yes" ]; then
+        cat >> "root/etc/netctl/wireless" << __END__
+Hidden=yes
+__END__
+    fi
 }
 
 doEnableWireless() {
-    cat > "root/etc/systemd/system/netctl@$WIRELESS_INTERFACE.service" << __END__
-.include /usr/lib/systemd/system/netctl@.service
+    chmod 0600 "root/etc/netctl/wireless"
 
+    ln -s "/usr/lib/systemd/system/netctl@.service" "root/etc/systemd/system/multi-user.target.wants/netctl@wireless.service"
+    mkdir -p "root/etc/systemd/system/netctl@wireless.service.d"
+    cat > "root/etc/systemd/system/netctl@wireless.service.d/profile.conf" << __END__
 [Unit]
 BindsTo=sys-subsystem-net-devices-$WIRELESS_INTERFACE.device
 After=sys-subsystem-net-devices-$WIRELESS_INTERFACE.device
 __END__
-
-    ln -s "/etc/systemd/system/netctl@$WIRELESS_INTERFACE.service" "root/etc/systemd/system/multi-user.target.wants/netctl@$WIRELESS_INTERFACE.service"
 }
 
 doDisableIpv6() {
@@ -535,6 +533,8 @@ if [ "$SET_ETHERNET" == "yes" ]; then
     else
         doSetEthernetDhcp
     fi
+
+    doEnableEthernet
 fi
 
 if [ "$SET_WIRELESS" == "yes" ]; then
