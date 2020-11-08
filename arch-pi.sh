@@ -248,6 +248,8 @@ __END__
 }
 
 doSetEthernetDhcp() {
+    rm -f "root/etc/systemd/network/eth*.network"
+
     cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
 [Match]
 Name=$ETHERNET_INTERFACE
@@ -264,6 +266,8 @@ __END__
 }
 
 doSetEthernetStatic() {
+    rm -f "root/etc/systemd/network/eth*.network"
+
     cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
 [Match]
 Name=$ETHERNET_INTERFACE

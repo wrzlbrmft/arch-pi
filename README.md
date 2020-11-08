@@ -95,6 +95,19 @@ That's it!
 You can login as the default user `alarm` with the password `alarm`.
 The default root password is `root`.
 
+### Initialize Pacman
+
+Before you can install additional packages, you must initialize the pacman
+keyring and populate the Arch Linux ARM package signing keys.
+
+Login as `root` and type in:
+
+```
+pacman-key --init && pacman-key --populate archlinuxarm
+```
+
+That's it!
+
 ### Installing Yay or Yaourt
 
 `arch-pi`
