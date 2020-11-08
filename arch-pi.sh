@@ -248,85 +248,97 @@ __END__
 }
 
 doSetEthernetDhcp() {
-    cat > "root/etc/netctl/ethernet" << __END__
-Interface=$ETHERNET_INTERFACE
-Connection=ethernet
-IP=dhcp
+    cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
+[Match]
+Name=$ETHERNET_INTERFACE
+
+[Network]
+DHCP=true
 __END__
+
+    if [ "$DISABLE_IPV6" == "yes" ]; then
+        cat >> "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
+IPv6AcceptRouterAdvertisements=false
+__END__
+    fi
 }
 
 doSetEthernetStatic() {
-    cat > "root/etc/netctl/ethernet" << __END__
-Interface=$ETHERNET_INTERFACE
-Connection=ethernet
-IP=static
-Address=('$ETHERNET_ADDRESS')
-Gateway='$ETHERNET_GATEWAY'
-DNS=('$ETHERNET_DNS')
-__END__
-}
+    cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
+[Match]
+Name=$ETHERNET_INTERFACE
 
-doEnableEthernet() {
-    rm -f "root/etc/systemd/network/eth0.network"
+[Network]
+DNS=$ETHERNET_DNS
 
-    chmod 0600 "root/etc/netctl/ethernet"
+[Address]
+Address=$ETHERNET_ADDRESS
 
-    ln -s "/usr/lib/systemd/system/netctl@.service" "root/etc/systemd/system/multi-user.target.wants/netctl@ethernet.service"
-    mkdir -p "root/etc/systemd/system/netctl@ethernet.service.d"
-    cat > "root/etc/systemd/system/netctl@ethernet.service.d/profile.conf" << __END__
-[Unit]
-BindsTo=sys-subsystem-net-devices-$ETHERNET_INTERFACE.device
-After=sys-subsystem-net-devices-$ETHERNET_INTERFACE.device
+[Route]
+Gateway=$ETHERNET_GATEWAY
 __END__
 }
 
 doSetWirelessDhcp() {
-    cat > "root/etc/netctl/wireless" << __END__
-Interface=$WIRELESS_INTERFACE
-Connection=wireless
-Security=$WIRELESS_SECURITY
-IP=dhcp
-ESSID='$WIRELESS_ESSID'
-Key='$WIRELESS_KEY'
+    cat > "root/etc/systemd/network/$WIRELESS_INTERFACE.network" << __END__
+[Match]
+Name=$WIRELESS_INTERFACE
+
+[Network]
+DHCP=true
 __END__
 
-    if [ "WIRELESS_HIDDEN" == "yes" ]; then
-        cat >> "root/etc/netctl/wireless" << __END__
-Hidden=yes
+    if [ "$DISABLE_IPV6" == "yes" ]; then
+        cat >> "root/etc/systemd/network/$WIRELESS_INTERFACE.network" << __END__
+IPv6AcceptRouterAdvertisements=false
 __END__
     fi
 }
 
 doSetWirelessStatic() {
-    cat > "root/etc/netctl/wireless" << __END__
-Interface=$WIRELESS_INTERFACE
-Connection=wireless
-Security=$WIRELESS_SECURITY
-ESSID='$WIRELESS_ESSID'
-Key='$WIRELESS_KEY'
-IP=static
-Address='$WIRELESS_ADDRESS'
-Gateway='$WIRELESS_GATEWAY'
-DNS=('$WIRELESS_DNS')
-__END__
+    cat > "root/etc/systemd/network/$WIRELESS_INTERFACE.network" << __END__
+[Match]
+Name=$WIRELESS_INTERFACE
 
-    if [ "WIRELESS_HIDDEN" == "yes" ]; then
-        cat >> "root/etc/netctl/wireless" << __END__
-Hidden=yes
+[Network]
+DNS=$WIRELESS_DNS
+
+[Address]
+Address=$WIRELESS_ADDRESS
+
+[Route]
+Gateway=$WIRELESS_GATEWAY
 __END__
-    fi
 }
 
 doEnableWireless() {
-    chmod 0600 "root/etc/netctl/wireless"
+    echo -n > "root/etc/wpa_supplicant/wpa_supplicant-$WIRELESS_INTERFACE.conf"
 
-    ln -s "/usr/lib/systemd/system/netctl@.service" "root/etc/systemd/system/multi-user.target.wants/netctl@wireless.service"
-    mkdir -p "root/etc/systemd/system/netctl@wireless.service.d"
-    cat > "root/etc/systemd/system/netctl@wireless.service.d/profile.conf" << __END__
-[Unit]
-BindsTo=sys-subsystem-net-devices-$WIRELESS_INTERFACE.device
-After=sys-subsystem-net-devices-$WIRELESS_INTERFACE.device
+    if [ ! -z "$WIRELESS_COUNTRY" ]; then
+        cat >> "root/etc/wpa_supplicant/wpa_supplicant-$WIRELESS_INTERFACE.conf" << __END__
+country=$WIRELESS_COUNTRY
 __END__
+    fi
+
+    cat >> "root/etc/wpa_supplicant/wpa_supplicant-$WIRELESS_INTERFACE.conf" << __END__
+network={
+    ssid="$WIRELESS_ESSID"
+    psk="$WIRELESS_KEY"
+__END__
+
+    if [ "$WIRELESS_HIDDEN" == "yes" ]; then
+        cat >> "root/etc/wpa_supplicant/wpa_supplicant-$WIRELESS_INTERFACE.conf" << __END__
+    scan_ssid=1
+__END__
+    fi
+
+    cat >> "root/etc/wpa_supplicant/wpa_supplicant-$WIRELESS_INTERFACE.conf" << __END__
+}
+__END__
+
+    chmod 0640 "root/etc/wpa_supplicant/wpa_supplicant-$WIRELESS_INTERFACE.conf"
+
+    ln -s "/usr/lib/systemd/system/wpa_supplicant@.service" "root/etc/systemd/system/multi-user.target.wants/wpa_supplicant@$WIRELESS_INTERFACE.service"
 }
 
 doDisableIpv6() {
@@ -533,8 +545,6 @@ if [ "$SET_ETHERNET" == "yes" ]; then
     else
         doSetEthernetDhcp
     fi
-
-    doEnableEthernet
 fi
 
 if [ "$SET_WIRELESS" == "yes" ]; then
