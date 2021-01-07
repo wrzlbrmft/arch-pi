@@ -107,6 +107,13 @@ Login as `root` and type in:
 pacman-key --init && pacman-key --populate archlinuxarm
 ```
 
+After Pacman is initialized, it's probably a good idea to check for available
+package updates:
+
+```
+pacman -Syyu
+```
+
 That's it!
 
 ### Installing Yay or Yaourt
@@ -182,8 +189,7 @@ makepkg -i -s --noconfirm --needed
 cd ..
 ```
 
-After Yay or Yaourt is installed, it's probably a good idea to check for
-available package updates:
+After Yay or Yaourt is installed, you can check for available package updates:
 
 Using Yay:
 
