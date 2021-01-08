@@ -222,6 +222,13 @@ doMount() {
 
 doUnpackArchLinux() {
     tar xvf "$(basename "$ARCH_LINUX_DOWNLOAD_URL")" -C root -p
+
+    if [ "$HARDWARE_MODEL_SELECT" == "5" ]; then
+        # Raspberry Pi 4 / AArch64
+        # Before unmounting the partitions, update /etc/fstab for the different
+        # SD block device compared to the Raspberry Pi 3
+        sed -i 's/mmcblk0/mmcblk1/g' root/etc/fstab
+    fi
 }
 
 doFinalizeBoot() {
@@ -247,9 +254,20 @@ FONT=$2
 __END__
 }
 
-doSetEthernetDhcp() {
-    rm -f "root/etc/systemd/network/eth*.network"
+doFixLinkIsNotReady() {
+    if [ "$HARDWARE_MODEL_SELECT" == "4" ] || [ "$HARDWARE_MODEL_SELECT" == "5" ]; then
+        # Raspberry Pi 4
+        # https://github.com/raspberrypi/linux/issues/3108#issuecomment-723550749
+        sed -i 's/^\(MODULES=\)()$/\1(bcm_phy_lib broadcom mdio_bcm_unimac genet)/g' root/etc/mkinitcpio.conf
+    fi
+}
 
+doClearNetwork() {
+    rm -f "root/etc/systemd/network/en*.network"
+    rm -f "root/etc/systemd/network/eth*.network"
+}
+
+doSetEthernetDhcp() {
     cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
 [Match]
 Name=$ETHERNET_INTERFACE
@@ -266,8 +284,6 @@ __END__
 }
 
 doSetEthernetStatic() {
-    rm -f "root/etc/systemd/network/eth*.network"
-
     cat > "root/etc/systemd/network/$ETHERNET_INTERFACE.network" << __END__
 [Match]
 Name=$ETHERNET_INTERFACE
@@ -560,6 +576,10 @@ doSetHostname "$HOSTNAME"
 doSetTimezone "$TIMEZONE"
 
 doSetConsole "$CONSOLE_KEYMAP" "$CONSOLE_FONT"
+
+doFixLinkIsNotReady
+
+doClearNetwork
 
 if [ "$SET_ETHERNET" == "yes" ]; then
     if [ "$ETHERNET_DHCP" == "no" ]; then
