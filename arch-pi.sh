@@ -223,10 +223,10 @@ doMount() {
 doUnpackArchLinux() {
     tar xvf "$(basename "$ARCH_LINUX_DOWNLOAD_URL")" -C root -p
 
-    if [ "$HARDWARE_MODEL_SELECT" == "5" ]; then
-        # Raspberry Pi 4 / AArch64
+    if [ "$HARDWARE_MODEL_SELECT" == "3" ] || [ "$HARDWARE_MODEL_SELECT" == "5" ]; then
+        # AArch64
         # Before unmounting the partitions, update /etc/fstab for the different
-        # SD block device compared to the Raspberry Pi 3
+        # SD block device compared to ARMv7
         sed -i 's/mmcblk0/mmcblk1/g' root/etc/fstab
     fi
 }
@@ -263,8 +263,7 @@ doFixLinkIsNotReady() {
 }
 
 doClearNetwork() {
-    rm -f "root/etc/systemd/network/en*.network"
-    rm -f "root/etc/systemd/network/eth*.network"
+    rm -f "root/etc/systemd/network/*.network"
 }
 
 doSetEthernetDhcp() {
